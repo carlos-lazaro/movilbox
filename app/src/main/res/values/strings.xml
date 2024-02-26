@@ -15,5 +15,7 @@
     <string name="filter_name_stock">Stock</string>
     <string name="filter_name_brand">Brand</string>
     <string name="filter_name_title">Title</string>
+    <string name="products_error_message_syncing">An error occurred while syncing, please check your Internet connection and try again</string>
+    <string name="products_success_message_syncing">Last Update</string>
 
 </resources>

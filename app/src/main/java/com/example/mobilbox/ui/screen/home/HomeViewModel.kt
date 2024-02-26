@@ -2,6 +2,7 @@ package com.example.mobilbox.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobilbox.domain.model.Category
 import com.example.mobilbox.domain.usecase.product.ProductFilter
 import com.example.mobilbox.domain.usecase.product.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,14 +24,22 @@ class HomeViewModel @Inject constructor(
         private val productUseCases : ProductUseCases
 ) : ViewModel() {
 
-    init {
+    private fun syncStateDatabase() {
         viewModelScope.launch {
-            productUseCases.syncDatabaseUseCase()
+            stateSync.value = ResourceState.Loading
+            val isSuccess = productUseCases.syncDatabaseUseCase()
+            if (isSuccess) {
+                stateSync.value = ResourceState.Success(System.currentTimeMillis())
+            } else {
+                stateSync.value = ResourceState.Error
+            }
         }
     }
 
     private val _uiEvent = Channel<HomeUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private val stateSync = MutableStateFlow<ResourceState>(ResourceState.Loading)
 
     private val currentFilter = MutableStateFlow<ProductFilter>(ProductFilter.ByRating())
 
@@ -43,9 +52,10 @@ class HomeViewModel @Inject constructor(
         categories,
         brands,
         currentFilter,
-    ) { categories, brands, filter ->
-        Triple(categories, brands, filter)
-    }.flatMapLatest { (categories, brands, filter) ->
+        stateSync,
+    ) { categories, brands, filter, stateSync ->
+        HomeStateData(categories, brands, filter, stateSync)
+    }.flatMapLatest { (categories, brands, filter, stateSync) ->
         productUseCases.getProductsUseCase(filter)
             .map { products ->
                 HomeState(
@@ -53,13 +63,18 @@ class HomeViewModel @Inject constructor(
                     productFilter = filter,
                     categories = categories,
                     brands = brands,
+                    stateSync = stateSync,
                 )
             }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        HomeState(emptyList(), emptyList(), emptyList(), currentFilter.value)
+        HomeState(emptyList(), emptyList(), emptyList(), currentFilter.value, ResourceState.Loading)
     )
+
+    init {
+        syncStateDatabase()
+    }
 
     fun onEvent(event : HomeEvent) {
         when (event) {
@@ -101,6 +116,10 @@ class HomeViewModel @Inject constructor(
                 }
                 currentFilter.value = newFilter
             }
+
+            HomeEvent.OnResetSync -> {
+                syncStateDatabase()
+            }
         }
     }
 
@@ -108,5 +127,18 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEvent.send(event)
         }
+    }
+
+    internal data class HomeStateData(
+            val categories : List<Category>,
+            val brands : List<String>,
+            val filter : ProductFilter,
+            val syncState : ResourceState,
+    )
+
+    sealed interface ResourceState {
+        data object Loading : ResourceState
+        data object Error : ResourceState
+        data class Success(val now : Long) : ResourceState
     }
 }

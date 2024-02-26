@@ -9,4 +9,5 @@ data class HomeState(
         var categories : List<Category>,
         var brands : List<String>,
         var productFilter : ProductFilter,
+        var stateSync: HomeViewModel.ResourceState,
 )

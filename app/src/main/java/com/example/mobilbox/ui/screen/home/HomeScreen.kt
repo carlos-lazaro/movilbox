@@ -16,6 +16,7 @@ import com.example.mobilbox.ui.MovilboxAppState
 import com.example.mobilbox.ui.component.ProductCard
 import com.example.mobilbox.ui.component.RowFilters
 import com.example.mobilbox.ui.component.SearchBarProducts
+import com.example.mobilbox.ui.screen.home.component.ResourceProgressIndicator
 import com.example.mobilbox.ui.screen.product.detail.navigation.navigateToProductDetail
 import kotlinx.coroutines.flow.Flow
 
@@ -68,6 +69,9 @@ fun HomeScreen(
         ) {
             onEvent(HomeEvent.OnChangeFilter(it))
         }
+        ResourceProgressIndicator(uiState.stateSync) {
+            onEvent(HomeEvent.OnResetSync)
+        }
         LazyVerticalGrid(
             state = lazyGridState,
             columns = GridCells.Fixed(2),
@@ -84,5 +88,3 @@ fun HomeScreen(
         }
     }
 }
-
-

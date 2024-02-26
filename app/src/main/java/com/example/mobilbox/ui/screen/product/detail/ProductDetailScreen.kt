@@ -2,6 +2,7 @@ package com.example.mobilbox.ui.screen.product.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,14 +78,32 @@ fun ProductDetailScreen(
                 .verticalScroll(scrollState)
                 .fillMaxSize()
         ) {
-            AsyncImage(
-                contentScale = ContentScale.Fit,
-                model = product.thumbnail,
-                contentDescription = null,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .aspectRatio(2f)
-            )
+            Box {
+                AsyncImage(
+                    contentScale = ContentScale.Fit,
+                    model = product.thumbnail,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background)
+                        .aspectRatio(2f)
+                )
+                IconButton(
+                    onClick = {
+                        appState.navController.popBackStack()
+                    },
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_bx2))
+                        .background(
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                            shape = CircleShape,
+                        )
+                ) {
+                    Icon(
+                        Icons.Filled.ArrowBack, contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
             Column(
                 modifier = Modifier
                     .padding(dimensionResource(R.dimen.padding_bx2))
