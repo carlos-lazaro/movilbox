@@ -89,7 +89,7 @@ fun ProductDetailScreen(
                 )
                 IconButton(
                     onClick = {
-                        appState.navController.popBackStack()
+                        appState.navController.navigateUp()
                     },
                     modifier = Modifier
                         .padding(dimensionResource(R.dimen.padding_bx2))
@@ -99,7 +99,8 @@ fun ProductDetailScreen(
                         )
                 ) {
                     Icon(
-                        Icons.Filled.ArrowBack, contentDescription = null,
+                        Icons.Filled.ArrowBack,
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
