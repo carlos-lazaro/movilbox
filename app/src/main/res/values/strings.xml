@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">mobilbox</string>
+    <string name="app_name">movilbox</string>
+
+    <string name="modal_sheet_categories_title">Select a Category</string>
+    <string name="modal_sheet_brands_title">Select a Brand</string>
+    <string name="message_out_of_stock">Out of stock</string>
+    <string name="message_available_stock">Stock available</string>
+    <string name="message_search_bar_placeholder">Search your product</string>
+    <string name="price_prefix">$</string>
+    <string name="discount_suffix">OFF</string>
+    <string name="filter_name_category">Category</string>
+    <string name="filter_name_price">Price</string>
+    <string name="filter_name_discount_percentage">Discount</string>
+    <string name="filter_name_rating">Rating</string>
+    <string name="filter_name_stock">Stock</string>
+    <string name="filter_name_brand">Brand</string>
+    <string name="filter_name_title">Title</string>
+
 </resources>
