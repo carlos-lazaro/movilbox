@@ -1,5 +1,6 @@
 package com.example.mobilbox.ui.screen.product.detail
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -35,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -181,22 +184,25 @@ fun ProductDetailScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImageCarousel(images : List<String>, modifier : Modifier = Modifier) {
-    LazyRow(
-        modifier = modifier
-            .fillMaxWidth()
+    val pagerState = rememberPagerState {
+        images.size
+    }
+    HorizontalPager(
+        state = pagerState,
+        key = { it },
+        pageSize = PageSize.Fixed(300.dp)
     ) {
-        items(images, key = { it }) { image ->
-            AsyncImage(
-                contentScale = ContentScale.Fit,
-                model = image,
-                contentDescription = null,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .aspectRatio(1f)
-            )
-        }
+        AsyncImage(
+            contentScale = ContentScale.Fit,
+            model = images[it],
+            contentDescription = null,
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .aspectRatio(1f)
+        )
     }
 }
 
