@@ -49,6 +49,7 @@ fun ResourceProgressIndicator(
                     Text(
                         text = stringResource(R.string.products_error_message_syncing),
                         style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.alpha(0.8f)
                     )
                 }

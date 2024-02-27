@@ -21,19 +21,29 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,22 +100,13 @@ fun ProductDetailScreen(
                         .background(MaterialTheme.colorScheme.background)
                         .aspectRatio(2f)
                 )
-                IconButton(
-                    onClick = {
-                        appState.navController.navigateUp()
-                    },
+                IconButtonWithBackground(icon = Icons.Filled.ArrowBack) { appState.navController.navigateUp() }
+                MenuDropdown(
                     modifier = Modifier
+                        .align(Alignment.TopEnd)
                         .padding(dimensionResource(R.dimen.padding_bx2))
-                        .background(
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                            shape = CircleShape,
-                        )
                 ) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
+                    onEvent(ProductDetailEvent.OnDeleteProduct)
                 }
             }
             Column(
@@ -173,6 +174,9 @@ fun ProductDetailScreen(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
+
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+                ResourceProgressIndicator(uiState.stateDelete) { appState.navController.navigateUp() }
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
 
                 ChipElement(name = product.category)
@@ -203,6 +207,100 @@ fun ImageCarousel(images : List<String>, modifier : Modifier = Modifier) {
                 .background(MaterialTheme.colorScheme.background)
                 .aspectRatio(1f)
         )
+    }
+}
+
+@Composable
+fun MenuDropdown(
+        modifier : Modifier = Modifier,
+        onDelete : () -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = modifier
+    ) {
+        IconButtonWithBackground(
+            icon = Icons.Filled.MoreVert,
+        ) { expanded = true }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Delete") },
+                onClick = {
+                    expanded = false
+                    onDelete()
+                },
+                leadingIcon = {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = null
+                    )
+                })
+        }
+    }
+}
+
+@Composable
+fun IconButtonWithBackground(
+        modifier : Modifier = Modifier,
+        icon : ImageVector,
+        onClick : () -> Unit,
+) {
+    IconButton(
+        onClick = { onClick() },
+        modifier = modifier
+            .padding(dimensionResource(R.dimen.padding_bx2))
+            .background(
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                shape = CircleShape,
+            )
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
+
+@Composable
+fun ResourceProgressIndicator(
+        state : ProductDetailViewModel.ResourceState? = null,
+        onSuccess : () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_bx2))
+    ) {
+        when (state) {
+            ProductDetailViewModel.ResourceState.Error -> {
+                Text(
+                    text = stringResource(R.string.product_error_message_deleting),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.alpha(0.8f)
+                )
+            }
+
+            ProductDetailViewModel.ResourceState.Loading
+            -> {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+
+            ProductDetailViewModel.ResourceState.Success -> {
+                onSuccess()
+            }
+
+            else -> {}
+        }
     }
 }
 

@@ -6,4 +6,5 @@ data class ProductUseCases(
         val getProductByIdUseCase : GetProductByIdUseCase,
         val getProductCategoriesUseCase : GetProductCategoriesUseCase,
         val getProductBrandsUseCase : GetProductBrandsUseCase,
+        val deleteProductByIdUseCase : DeleteProductByIdUseCase,
 )

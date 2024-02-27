@@ -27,7 +27,14 @@ class ProductDetailViewModel @Inject constructor(
                 viewModelScope.launch {
                     getProduct(event.id)
                 }
+            }
 
+            ProductDetailEvent.OnDeleteProduct -> {
+                viewModelScope.launch {
+                    uiState.value.product?.let { product ->
+                        deleteProduct(product.id)
+                    }
+                }
             }
         }
     }
@@ -35,10 +42,31 @@ class ProductDetailViewModel @Inject constructor(
     private suspend fun getProduct(id : Int? = null) {
         id?.let {
             productUseCases.getProductByIdUseCase(it).let { product ->
-                _uiState.update {
-                    _uiState.value.copy(product = product)
+                _uiState.update { currentState ->
+                    currentState.copy(product = product)
                 }
             }
         }
+    }
+
+    private suspend fun deleteProduct(id : Int? = null) {
+        id?.let {
+            _uiState.update { currentState ->
+                currentState.copy(stateDelete = ResourceState.Loading)
+            }
+            productUseCases.deleteProductByIdUseCase(it).let { isSuccess ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        stateDelete = if (isSuccess) ResourceState.Success else ResourceState.Error
+                    )
+                }
+            }
+        }
+    }
+
+    sealed interface ResourceState {
+        data object Loading : ResourceState
+        data object Error : ResourceState
+        data object Success : ResourceState
     }
 }

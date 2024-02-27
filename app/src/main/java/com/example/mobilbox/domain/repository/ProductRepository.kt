@@ -12,4 +12,5 @@ interface ProductRepository {
     fun getProductsByFilter(filter : ProductFilter) : Flow<List<Product>>
     fun getProductCategories() : Flow<List<Category>>
     fun getProductBrands() : Flow<List<String>>
+    suspend fun deleteProductById(id : Int) : Boolean
 }

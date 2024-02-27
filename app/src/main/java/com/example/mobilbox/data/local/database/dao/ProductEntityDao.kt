@@ -97,6 +97,9 @@ interface ProductEntityDao {
         }
     }
 
+    @Query("DELETE FROM products WHERE id = :id")
+    suspend fun deleteProductById(id : Int)
+
     @Upsert
     suspend fun upsertProduct(productEntity : ProductEntity)
 

@@ -1,6 +1,7 @@
 package com.example.mobilbox.domain.di
 
 import com.example.mobilbox.domain.repository.ProductRepository
+import com.example.mobilbox.domain.usecase.product.DeleteProductByIdUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductBrandsUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductByIdUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductCategoriesUseCase
@@ -26,6 +27,7 @@ class DomainModule {
             getProductByIdUseCase = GetProductByIdUseCase(repository),
             getProductCategoriesUseCase = GetProductCategoriesUseCase(repository),
             getProductBrandsUseCase = GetProductBrandsUseCase(repository),
+            deleteProductByIdUseCase = DeleteProductByIdUseCase(repository)
         )
     }
 }

@@ -64,4 +64,21 @@ class ProductEntityRepository
     override fun getProductBrands() : Flow<List<String>> {
         return productEntityDao.getBrands()
     }
+
+    override suspend fun deleteProductById(id : Int) : Boolean {
+        try {
+            val productResource = productService.deleteProductById(id)
+
+            productResource?.let {
+                if (it.isDeleted) {
+                    productEntityDao.deleteProductById(id)
+                    return true
+                }
+            }
+        } catch (_ : Exception) {
+            return false
+        }
+
+        return false
+    }
 }
