@@ -1,7 +1,7 @@
 [versions]
 activity-compose = "1.8.2"
 androidx-junit = "1.1.5"
-coil-compose = "2.5.0"
+application = "8.2.2"
 coil = "2.5.0"
 compose-bom = "2024.02.01"
 core-ktx = "1.12.0"
@@ -9,6 +9,7 @@ espresso-core = "3.5.1"
 hilt-android = "2.50"
 hilt-navigation-compose = "1.2.0"
 junit = "4.13.2"
+kotlin = "1.9.0"
 kotlin-reflect = "1.9.20"
 lifecycle-runtime-ktx = "2.7.0"
 logging-interceptor = "4.12.0"
@@ -36,7 +37,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-ktx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-ktx" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android" }
@@ -47,3 +48,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 
 [plugins]
+androidApplication = { id = "com.android.application", version.ref = "application" }
+jetbrainsKotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+daggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
