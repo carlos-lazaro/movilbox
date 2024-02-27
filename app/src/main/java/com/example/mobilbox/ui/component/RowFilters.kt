@@ -1,6 +1,7 @@
 package com.example.mobilbox.ui.component
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.mobilbox.R
 import com.example.mobilbox.domain.usecase.product.ProductFilter
 import com.example.mobilbox.domain.usecase.product.SortType
@@ -102,12 +104,10 @@ fun RowFilters(
                             }
                         }
                     },
-                    border = (if (isSelected(filter))
-                        MaterialTheme.colorScheme.primary else null)?.let { color ->
-                        AssistChipDefaults.assistChipBorder(
-                            borderColor = color
-                        )
-                    },
+                    border = if (isSelected(filter)) BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.primary
+                    ) else null,
                     label = { Text(stringResource(filter.idResource)) },
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(R.dimen.padding_bx2))
