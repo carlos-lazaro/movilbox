@@ -2,7 +2,7 @@ package com.example.mobilbox.ui.screen.home
 
 import com.example.mobilbox.domain.model.Category
 import com.example.mobilbox.domain.model.Product
-import com.example.mobilbox.domain.usecase.product.ProductFilter
+import com.example.mobilbox.domain.model.ProductFilter
 
 data class HomeState(
         var products : List<Product>,

@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.mobilbox.domain.usecase.product.ProductFilter
+import com.example.mobilbox.domain.model.ProductFilter
 import com.example.mobilbox.ui.MovilboxAppState
 import com.example.mobilbox.ui.component.ProductCard
 import com.example.mobilbox.ui.component.RowFilters

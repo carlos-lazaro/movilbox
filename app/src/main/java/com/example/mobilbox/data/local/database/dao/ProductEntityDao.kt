@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.mobilbox.data.local.database.model.ProductEntity
-import com.example.mobilbox.domain.usecase.product.ProductFilter
+import com.example.mobilbox.domain.model.ProductFilter
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -135,7 +135,7 @@ fun ProductDetailScreen(
                     if (product.stock < 1) {
                         Text(
                             text = stringResource(R.string.message_out_of_stock),
-                            color = MaterialTheme.colorScheme.error,
+                            color = MaterialTheme.colorScheme.tertiary,
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Medium,
                         )
@@ -281,8 +281,10 @@ fun ResourceProgressIndicator(
             ProductDetailViewModel.ResourceState.Error -> {
                 Text(
                     text = stringResource(R.string.product_error_message_deleting),
-                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontStyle = FontStyle.Italic,
+                        color = MaterialTheme.colorScheme.tertiary,
+                    ),
                     modifier = Modifier.alpha(0.8f)
                 )
             }

@@ -1,4 +1,4 @@
-package com.example.mobilbox.domain.usecase.product
+package com.example.mobilbox.domain.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown

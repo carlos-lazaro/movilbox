@@ -1,4 +1,4 @@
-package com.example.mobilbox.domain.usecase.product
+package com.example.mobilbox.domain.model
 
 import android.os.Parcelable
 import androidx.annotation.StringRes

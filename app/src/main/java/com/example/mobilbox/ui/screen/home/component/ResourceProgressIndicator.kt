@@ -3,6 +3,7 @@ package com.example.mobilbox.ui.screen.home.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -45,21 +46,22 @@ fun ResourceProgressIndicator(
     ) {
         when (stateSync) {
             HomeViewModel.ResourceState.Error -> {
-                Box(modifier = Modifier.weight(1f)) {
+                TextAndIconContainer(text = {
                     Text(
                         text = stringResource(R.string.products_error_message_syncing),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontStyle = FontStyle.Italic,
+                            color = MaterialTheme.colorScheme.tertiary,
+                        ),
                         modifier = Modifier.alpha(0.8f)
                     )
-                }
-                IconButton(
-                    onClick = { onReset() },
-                ) {
+                }, icon = {
                     Icon(
                         Icons.Filled.Refresh, contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                     )
+                }) {
+                    onReset()
                 }
             }
 
@@ -72,23 +74,45 @@ fun ResourceProgressIndicator(
             }
 
             is HomeViewModel.ResourceState.Success -> {
-                Text(
-                    text = "${stringResource(R.string.products_success_message_syncing)} ${
-                        getCurrentTimeFormatted(
-                            stateSync.now
-                        )
-                    }",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
-                    modifier = Modifier.alpha(0.8f)
-                )
-                IconButton(onClick = { onReset() }) {
+                TextAndIconContainer(text = {
+                    Text(
+                        text = "${stringResource(R.string.products_success_message_syncing)} ${
+                            getCurrentTimeFormatted(stateSync.now)
+                        }",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontStyle = FontStyle.Italic,
+                        ),
+                        modifier = Modifier.alpha(0.8f)
+                    )
+                }, icon = {
                     Icon(
                         Icons.Filled.Refresh, contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                     )
+                }) {
+                    onReset()
                 }
             }
         }
+    }
+}
+
+@Composable
+internal fun RowScope.TextAndIconContainer(
+        text : @Composable () -> Unit,
+        icon : @Composable () -> Unit,
+        iconOnClick : () -> Unit,
+) {
+    Box(modifier = Modifier.weight(1f)) {
+        text()
+    }
+
+    IconButton(
+        onClick = {
+            iconOnClick()
+        },
+    ) {
+        icon()
     }
 }
 

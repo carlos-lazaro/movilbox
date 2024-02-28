@@ -2,7 +2,7 @@ package com.example.mobilbox.domain.repository
 
 import com.example.mobilbox.domain.model.Category
 import com.example.mobilbox.domain.model.Product
-import com.example.mobilbox.domain.usecase.product.ProductFilter
+import com.example.mobilbox.domain.model.ProductFilter
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {

@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mobilbox.R
-import com.example.mobilbox.domain.usecase.product.ProductFilter
-import com.example.mobilbox.domain.usecase.product.SortType
+import com.example.mobilbox.domain.model.ProductFilter
+import com.example.mobilbox.domain.model.SortType
 
 internal data class ModalConfig(
         @StringRes val title : Int,
@@ -100,6 +100,7 @@ fun RowFilters(
                             }
 
                             else -> {
+                                filter.sortType = selectedFilter.sortType
                                 onChangeFilter(filter)
                             }
                         }

@@ -11,7 +11,7 @@ import com.example.mobilbox.data.remote.service.ProductService
 import com.example.mobilbox.domain.model.Category
 import com.example.mobilbox.domain.model.Product
 import com.example.mobilbox.domain.repository.ProductRepository
-import com.example.mobilbox.domain.usecase.product.ProductFilter
+import com.example.mobilbox.domain.model.ProductFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

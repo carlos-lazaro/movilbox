@@ -2,7 +2,7 @@ package com.example.mobilbox.ui.screen.product.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobilbox.domain.usecase.product.ProductUseCases
+import com.example.mobilbox.domain.usecase.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

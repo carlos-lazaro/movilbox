@@ -3,8 +3,8 @@ package com.example.mobilbox.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobilbox.domain.model.Category
-import com.example.mobilbox.domain.usecase.product.ProductFilter
-import com.example.mobilbox.domain.usecase.product.ProductUseCases
+import com.example.mobilbox.domain.model.ProductFilter
+import com.example.mobilbox.domain.usecase.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
