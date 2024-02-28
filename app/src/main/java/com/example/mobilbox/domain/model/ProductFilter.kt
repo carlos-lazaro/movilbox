@@ -9,8 +9,7 @@ sealed class ProductFilter(
         open var sortType : SortType = SortType.DESC,
         @StringRes val idResource : Int,
         val id : Int,
-) :
-    Parcelable {
+) : Parcelable {
 
     @Parcelize
     data class ByPrice(override var sortType : SortType = SortType.DESC) :
@@ -35,7 +34,6 @@ sealed class ProductFilter(
     data class ByStock(override var sortType : SortType = SortType.DESC) :
         ProductFilter(sortType, R.string.filter_name_stock, 5)
 
-
     @Parcelize
     data class ByBrand(
             var brand : String? = null,
@@ -45,7 +43,10 @@ sealed class ProductFilter(
 
     @Parcelize
 
-    data class ByTitle(var title : String, override var sortType : SortType = SortType.DESC) :
+    data class ByTitle(
+            var title : String,
+            override var sortType : SortType = SortType.DESC,
+    ) :
         ProductFilter(sortType, R.string.filter_name_title, 7)
 
     companion object {

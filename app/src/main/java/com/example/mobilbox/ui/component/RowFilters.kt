@@ -50,14 +50,18 @@ fun RowFilters(
         return filter.id == selectedFilter.id
     }
 
+    fun invertFilter(sortType : SortType) : SortType {
+        return if (sortType == SortType.DESC) {
+            SortType.ASC
+        } else {
+            SortType.DESC
+        }
+    }
+
     Row {
         ElevatedAssistChip(
             onClick = {
-                if (selectedFilter.sortType == SortType.DESC) {
-                    onChangeSortType(SortType.ASC)
-                } else {
-                    onChangeSortType(SortType.DESC)
-                }
+                onChangeSortType(invertFilter(selectedFilter.sortType))
             },
             label = { Text(selectedFilter.sortType.name) },
             trailingIcon = {
@@ -99,10 +103,26 @@ fun RowFilters(
                                 )
                             }
 
-                            else -> {
-                                filter.sortType = selectedFilter.sortType
-                                onChangeFilter(filter)
-                            }
+                            is ProductFilter.ByDiscountPercentage -> onChangeFilter(
+                                filter.copy(sortType = selectedFilter.sortType)
+                            )
+
+                            is ProductFilter.ByPrice -> onChangeFilter(
+                                filter.copy(sortType = selectedFilter.sortType)
+                            )
+
+                            is ProductFilter.ByRating -> onChangeFilter(
+                                filter.copy(sortType = selectedFilter.sortType)
+                            )
+
+                            is ProductFilter.ByStock -> onChangeFilter(
+                                filter.copy(sortType = selectedFilter.sortType)
+                            )
+
+                            is ProductFilter.ByTitle -> onChangeFilter(
+                                filter.copy(sortType = selectedFilter.sortType)
+                            )
+
                         }
                     },
                     border = if (isSelected(filter)) BorderStroke(

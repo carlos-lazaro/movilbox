@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -65,6 +66,9 @@ class HomeViewModel @Inject constructor(
                     brands = brands,
                     stateSync = stateSync,
                 )
+            }
+            .onEach {
+                sendUiEvent(HomeUiEvent.ResetScroll)
             }
     }.stateIn(
         viewModelScope,
