@@ -16,23 +16,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DatabaseLocalModule {
 
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext : Context) : AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "AppDatabase"
-        ).build()
-    }
+   @Provides
+   @Singleton
+   fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+      return Room.databaseBuilder(
+         appContext,
+         AppDatabase::class.java,
+         "AppDatabase"
+      ).build()
+   }
 
-    @Provides
-    fun provideProductEntityDao(appDatabase : AppDatabase) : ProductEntityDao {
-        return appDatabase.productEntityDao()
-    }
+   @Provides
+   fun provideProductEntityDao(appDatabase: AppDatabase): ProductEntityDao {
+      return appDatabase.productEntityDao()
+   }
 
-    @Provides
-    fun provideCategoryEntityDao(appDatabase : AppDatabase) : CategoryEntityDao {
-        return appDatabase.categoryEntityDao()
-    }
+   @Provides
+   fun provideCategoryEntityDao(appDatabase: AppDatabase): CategoryEntityDao {
+      return appDatabase.categoryEntityDao()
+   }
 }

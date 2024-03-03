@@ -22,128 +22,128 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-        private val productUseCases : ProductUseCases
+   private val productUseCases: ProductUseCases,
 ) : ViewModel() {
 
-    private val _uiEvent = Channel<HomeUiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+   private val _uiEvent = Channel<HomeUiEvent>()
+   val uiEvent = _uiEvent.receiveAsFlow()
 
-    private val stateSync = MutableStateFlow<ResourceState>(ResourceState.Loading)
+   private val stateSync = MutableStateFlow<ResourceState>(ResourceState.Loading)
 
-    private val currentFilter = MutableStateFlow<ProductFilter>(ProductFilter.ByRating())
+   private val currentFilter = MutableStateFlow<ProductFilter>(ProductFilter.ByRating())
 
-    private val categories = productUseCases.getProductCategoriesUseCase()
+   private val categories = productUseCases.getProductCategoriesUseCase()
 
-    private val brands = productUseCases.getProductBrandsUseCase()
+   private val brands = productUseCases.getProductBrandsUseCase()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState : StateFlow<HomeState> = combine(
-        categories,
-        brands,
-        currentFilter,
-        stateSync,
-    ) { categories, brands, filter, stateSync ->
-        HomeStateData(categories, brands, filter, stateSync)
-    }.flatMapLatest { (categories, brands, filter, stateSync) ->
-        productUseCases
-            .getProductsUseCase(filter)
-            .map { products ->
-                HomeState(
-                    products = products,
-                    productFilter = filter,
-                    categories = categories,
-                    brands = brands,
-                    stateSync = stateSync,
-                )
+   @OptIn(ExperimentalCoroutinesApi::class)
+   val uiState: StateFlow<HomeState> = combine(
+      categories,
+      brands,
+      currentFilter,
+      stateSync,
+   ) { categories, brands, filter, stateSync ->
+      HomeStateData(categories, brands, filter, stateSync)
+   }.flatMapLatest { (categories, brands, filter, stateSync) ->
+      productUseCases
+         .getProductsUseCase(filter)
+         .map { products ->
+            HomeState(
+               products = products,
+               productFilter = filter,
+               categories = categories,
+               brands = brands,
+               stateSync = stateSync,
+            )
+         }
+         .onEach {
+            sendUiEvent(HomeUiEvent.ResetScroll)
+         }
+   }.stateIn(
+      viewModelScope,
+      SharingStarted.WhileSubscribed(5_000),
+      HomeState(emptyList(), emptyList(), emptyList(), currentFilter.value, ResourceState.Loading)
+   )
+
+   init {
+      syncStateDatabase()
+   }
+
+   fun onEvent(event: HomeEvent) {
+      when (event) {
+         is HomeEvent.OnChangeFilter -> {
+            currentFilter.value = event.filter
+         }
+
+         is HomeEvent.OnChangeSortType -> {
+            val newFilter = when (currentFilter.value) {
+               is ProductFilter.ByPrice -> ProductFilter
+                  .ByPrice(event.sortType)
+
+               is ProductFilter.ByDiscountPercentage -> ProductFilter
+                  .ByDiscountPercentage(event.sortType)
+
+               is ProductFilter.ByCategory -> ProductFilter
+                  .ByCategory(
+                     (currentFilter.value as ProductFilter.ByCategory).category,
+                     sortType = event.sortType,
+                  )
+
+               is ProductFilter.ByRating -> ProductFilter
+                  .ByRating(event.sortType)
+
+               is ProductFilter.ByStock -> ProductFilter
+                  .ByStock(event.sortType)
+
+               is ProductFilter.ByBrand -> ProductFilter
+                  .ByBrand(
+                     (currentFilter.value as ProductFilter.ByBrand).brand,
+                     sortType = event.sortType,
+                  )
+
+               is ProductFilter.ByTitle -> ProductFilter
+                  .ByTitle(
+                     (currentFilter.value as ProductFilter.ByTitle).title,
+                     sortType = event.sortType,
+                  )
             }
-            .onEach {
-                sendUiEvent(HomeUiEvent.ResetScroll)
-            }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        HomeState(emptyList(), emptyList(), emptyList(), currentFilter.value, ResourceState.Loading)
-    )
+            currentFilter.value = newFilter
+         }
 
-    init {
-        syncStateDatabase()
-    }
+         HomeEvent.OnResetSync -> {
+            syncStateDatabase()
+         }
+      }
+   }
 
-    fun onEvent(event : HomeEvent) {
-        when (event) {
-            is HomeEvent.OnChangeFilter -> {
-                currentFilter.value = event.filter
-            }
+   private fun sendUiEvent(event: HomeUiEvent) {
+      viewModelScope.launch {
+         _uiEvent.send(event)
+      }
+   }
 
-            is HomeEvent.OnChangeSortType -> {
-                val newFilter = when (currentFilter.value) {
-                    is ProductFilter.ByPrice -> ProductFilter
-                        .ByPrice(event.sortType)
+   private fun syncStateDatabase() {
+      viewModelScope.launch {
+         stateSync.value = ResourceState.Loading
+         val isSuccess = productUseCases.syncDatabaseUseCase()
+         if (isSuccess) {
+            stateSync.value = ResourceState.Success(System.currentTimeMillis())
+         } else {
+            stateSync.value = ResourceState.Error
+         }
+      }
+   }
 
-                    is ProductFilter.ByDiscountPercentage -> ProductFilter
-                        .ByDiscountPercentage(event.sortType)
+   internal data class HomeStateData(
+      val categories: List<Category>,
+      val brands: List<String>,
+      val filter: ProductFilter,
+      val syncState: ResourceState,
+   )
 
-                    is ProductFilter.ByCategory -> ProductFilter
-                        .ByCategory(
-                            (currentFilter.value as ProductFilter.ByCategory).category,
-                            sortType = event.sortType,
-                        )
-
-                    is ProductFilter.ByRating -> ProductFilter
-                        .ByRating(event.sortType)
-
-                    is ProductFilter.ByStock -> ProductFilter
-                        .ByStock(event.sortType)
-
-                    is ProductFilter.ByBrand -> ProductFilter
-                        .ByBrand(
-                            (currentFilter.value as ProductFilter.ByBrand).brand,
-                            sortType = event.sortType,
-                        )
-
-                    is ProductFilter.ByTitle -> ProductFilter
-                        .ByTitle(
-                            (currentFilter.value as ProductFilter.ByTitle).title,
-                            sortType = event.sortType,
-                        )
-                }
-                currentFilter.value = newFilter
-            }
-
-            HomeEvent.OnResetSync -> {
-                syncStateDatabase()
-            }
-        }
-    }
-
-    private fun sendUiEvent(event : HomeUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(event)
-        }
-    }
-
-    private fun syncStateDatabase() {
-        viewModelScope.launch {
-            stateSync.value = ResourceState.Loading
-            val isSuccess = productUseCases.syncDatabaseUseCase()
-            if (isSuccess) {
-                stateSync.value = ResourceState.Success(System.currentTimeMillis())
-            } else {
-                stateSync.value = ResourceState.Error
-            }
-        }
-    }
-
-    internal data class HomeStateData(
-            val categories : List<Category>,
-            val brands : List<String>,
-            val filter : ProductFilter,
-            val syncState : ResourceState,
-    )
-
-    sealed interface ResourceState {
-        data object Loading : ResourceState
-        data object Error : ResourceState
-        data class Success(val now : Long) : ResourceState
-    }
+   sealed interface ResourceState {
+      data object Loading : ResourceState
+      data object Error : ResourceState
+      data class Success(val now: Long) : ResourceState
+   }
 }

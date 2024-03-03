@@ -23,38 +23,38 @@ import com.example.mobilbox.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBarProducts(onSearch : (String) -> Unit) {
-    var text by rememberSaveable { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
+fun SearchBarProducts(onSearch: (String) -> Unit) {
+   var text by rememberSaveable { mutableStateOf("") }
+   val focusManager = LocalFocusManager.current
 
-    fun onSearchEvent() {
-        focusManager.clearFocus()
-        if (text.trim().isNotBlank()) {
-            onSearch(text.trim())
-        }
-    }
+   fun onSearchEvent() {
+      focusManager.clearFocus()
+      if (text.trim().isNotBlank()) {
+         onSearch(text.trim())
+      }
+   }
 
-    SearchBar(
-        query = text,
-        onQueryChange = { text = it },
-        onSearch = { onSearchEvent() },
-        active = false,
-        onActiveChange = {},
-        placeholder = { Text(stringResource(id = R.string.message_search_bar_placeholder)) },
-        trailingIcon = {
-            IconButton(onClick = { onSearchEvent() }) {
-                Icon(Icons.Default.Search, contentDescription = null)
-            }
-        },
-        content = {},
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_bx2))
-    )
+   SearchBar(
+      query = text,
+      onQueryChange = { text = it },
+      onSearch = { onSearchEvent() },
+      active = false,
+      onActiveChange = {},
+      placeholder = { Text(stringResource(id = R.string.message_search_bar_placeholder)) },
+      trailingIcon = {
+         IconButton(onClick = { onSearchEvent() }) {
+            Icon(Icons.Default.Search, contentDescription = null)
+         }
+      },
+      content = {},
+      modifier = Modifier
+         .fillMaxWidth()
+         .padding(dimensionResource(R.dimen.padding_bx2))
+   )
 }
 
 @Preview
 @Composable
 fun PreviewSearchBarProducts() {
-    SearchBarProducts() {}
+   SearchBarProducts() {}
 }

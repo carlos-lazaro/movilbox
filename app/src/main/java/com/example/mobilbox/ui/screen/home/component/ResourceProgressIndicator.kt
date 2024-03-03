@@ -29,107 +29,107 @@ import java.util.Locale
 
 @Composable
 fun ResourceProgressIndicator(
-        stateSync : HomeViewModel.ResourceState,
-        onReset : () -> Unit,
+   stateSync: HomeViewModel.ResourceState,
+   onReset: () -> Unit,
 ) {
-    fun getCurrentTimeFormatted(time : Long) : String {
-        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.getDefault())
-        return dateFormat.format(Date(time))
-    }
+   fun getCurrentTimeFormatted(time: Long): String {
+      val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.getDefault())
+      return dateFormat.format(Date(time))
+   }
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_bx2))
-    ) {
-        when (stateSync) {
-            HomeViewModel.ResourceState.Error -> {
-                TextAndIconContainer(text = {
-                    Text(
-                        text = stringResource(R.string.products_error_message_syncing),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.tertiary,
-                        ),
-                        modifier = Modifier.alpha(0.8f)
-                    )
-                }, icon = {
-                    Icon(
-                        Icons.Filled.Refresh, contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }) {
-                    onReset()
-                }
+   Row(
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier
+         .fillMaxWidth()
+         .padding(dimensionResource(R.dimen.padding_bx2))
+   ) {
+      when (stateSync) {
+         HomeViewModel.ResourceState.Error -> {
+            TextAndIconContainer(text = {
+               Text(
+                  text = stringResource(R.string.products_error_message_syncing),
+                  style = MaterialTheme.typography.bodyMedium.copy(
+                     fontStyle = FontStyle.Italic,
+                     color = MaterialTheme.colorScheme.tertiary,
+                  ),
+                  modifier = Modifier.alpha(0.8f)
+               )
+            }, icon = {
+               Icon(
+                  Icons.Filled.Refresh, contentDescription = null,
+                  tint = MaterialTheme.colorScheme.primary,
+               )
+            }) {
+               onReset()
             }
+         }
 
-            HomeViewModel.ResourceState.Loading
-            -> {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
+         HomeViewModel.ResourceState.Loading,
+         -> {
+            LinearProgressIndicator(
+               modifier = Modifier
+                  .fillMaxWidth()
+            )
+         }
 
-            is HomeViewModel.ResourceState.Success -> {
-                TextAndIconContainer(text = {
-                    Text(
-                        text = "${stringResource(R.string.products_success_message_syncing)} ${
-                            getCurrentTimeFormatted(stateSync.now)
-                        }",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontStyle = FontStyle.Italic,
-                        ),
-                        modifier = Modifier.alpha(0.8f)
-                    )
-                }, icon = {
-                    Icon(
-                        Icons.Filled.Refresh, contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }) {
-                    onReset()
-                }
+         is HomeViewModel.ResourceState.Success -> {
+            TextAndIconContainer(text = {
+               Text(
+                  text = "${stringResource(R.string.products_success_message_syncing)} ${
+                     getCurrentTimeFormatted(stateSync.now)
+                  }",
+                  style = MaterialTheme.typography.bodyMedium.copy(
+                     fontStyle = FontStyle.Italic,
+                  ),
+                  modifier = Modifier.alpha(0.8f)
+               )
+            }, icon = {
+               Icon(
+                  Icons.Filled.Refresh, contentDescription = null,
+                  tint = MaterialTheme.colorScheme.primary,
+               )
+            }) {
+               onReset()
             }
-        }
-    }
+         }
+      }
+   }
 }
 
 @Composable
 internal fun RowScope.TextAndIconContainer(
-        text : @Composable () -> Unit,
-        icon : @Composable () -> Unit,
-        iconOnClick : () -> Unit,
+   text: @Composable () -> Unit,
+   icon: @Composable () -> Unit,
+   iconOnClick: () -> Unit,
 ) {
-    Box(modifier = Modifier.weight(1f)) {
-        text()
-    }
+   Box(modifier = Modifier.weight(1f)) {
+      text()
+   }
 
-    IconButton(
-        onClick = {
-            iconOnClick()
-        },
-    ) {
-        icon()
-    }
+   IconButton(
+      onClick = {
+         iconOnClick()
+      },
+   ) {
+      icon()
+   }
 }
 
 @Preview
 @Composable
 fun ResourceProgressIndicatorPreview() {
-    ResourceProgressIndicator(HomeViewModel.ResourceState.Loading) {}
+   ResourceProgressIndicator(HomeViewModel.ResourceState.Loading) {}
 }
 
 @Preview
 @Composable
 fun ResourceProgressIndicatorPreview2() {
-    ResourceProgressIndicator(HomeViewModel.ResourceState.Success(System.currentTimeMillis())) {}
+   ResourceProgressIndicator(HomeViewModel.ResourceState.Success(System.currentTimeMillis())) {}
 }
 
 @Preview
 @Composable
 fun ResourceProgressIndicatorPreview3() {
-    ResourceProgressIndicator(HomeViewModel.ResourceState.Error) {}
+   ResourceProgressIndicator(HomeViewModel.ResourceState.Error) {}
 }

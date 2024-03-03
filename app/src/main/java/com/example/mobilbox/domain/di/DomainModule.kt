@@ -18,16 +18,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DomainModule {
 
-    @Provides
-    @Singleton
-    fun provideProductUseCases(repository : ProductRepository) : ProductUseCases {
-        return ProductUseCases(
-            syncDatabaseUseCase = SyncDatabaseUseCase(repository),
-            getProductsUseCase = GetProductsUseCase(repository),
-            getProductByIdUseCase = GetProductByIdUseCase(repository),
-            getProductCategoriesUseCase = GetProductCategoriesUseCase(repository),
-            getProductBrandsUseCase = GetProductBrandsUseCase(repository),
-            deleteProductByIdUseCase = DeleteProductByIdUseCase(repository)
-        )
-    }
+   @Provides
+   @Singleton
+   fun provideProductUseCases(repository: ProductRepository): ProductUseCases {
+      return ProductUseCases(
+         syncDatabaseUseCase = SyncDatabaseUseCase(repository),
+         getProductsUseCase = GetProductsUseCase(repository),
+         getProductByIdUseCase = GetProductByIdUseCase(repository),
+         getProductCategoriesUseCase = GetProductCategoriesUseCase(repository),
+         getProductBrandsUseCase = GetProductBrandsUseCase(repository),
+         deleteProductByIdUseCase = DeleteProductByIdUseCase(repository)
+      )
+   }
 }

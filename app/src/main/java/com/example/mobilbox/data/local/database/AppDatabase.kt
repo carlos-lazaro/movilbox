@@ -9,14 +9,14 @@ import com.example.mobilbox.data.local.database.model.CategoryEntity
 import com.example.mobilbox.data.local.database.model.ProductEntity
 
 @Database(
-    entities = [
-        ProductEntity::class,
-        CategoryEntity::class,
-    ], version = 1
+   entities = [
+      ProductEntity::class,
+      CategoryEntity::class,
+   ], version = 1
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun productEntityDao() : ProductEntityDao
-    abstract fun categoryEntityDao() : CategoryEntityDao
+   abstract fun productEntityDao(): ProductEntityDao
+   abstract fun categoryEntityDao(): CategoryEntityDao
 }

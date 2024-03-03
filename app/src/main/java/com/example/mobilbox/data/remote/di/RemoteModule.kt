@@ -15,28 +15,28 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class RemoteModule {
 
-    @Singleton
-    @Provides
-    fun provideOkHttpClient() : OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
+   @Singleton
+   @Provides
+   fun provideOkHttpClient(): OkHttpClient {
+      val loggingInterceptor = HttpLoggingInterceptor()
+      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+      return OkHttpClient.Builder()
+         .addInterceptor(loggingInterceptor)
+         .build()
+   }
 
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient : OkHttpClient) : Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://dummyjson.com/")
-            .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-    }
+   @Singleton
+   @Provides
+   fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+      return Retrofit.Builder()
+         .baseUrl("https://dummyjson.com/")
+         .client(okHttpClient)
+         .addConverterFactory(MoshiConverterFactory.create())
+         .build()
+   }
 
-    @Provides
-    fun provideApiService(retrofit : Retrofit) : ProductService {
-        return retrofit.create(ProductService::class.java)
-    }
+   @Provides
+   fun provideApiService(retrofit: Retrofit): ProductService {
+      return retrofit.create(ProductService::class.java)
+   }
 }

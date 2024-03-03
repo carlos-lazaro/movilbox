@@ -8,12 +8,11 @@ import com.example.mobilbox.ui.navigation.AppNavHost
 
 @Composable
 fun MovilboxApp(
-        appState : MovilboxAppState = rememberMovilboxAppState(),
+   appState: MovilboxAppState = rememberMovilboxAppState(),
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        AppNavHost(appState)
-    }
+   Surface(
+      modifier = Modifier.fillMaxSize()
+   ) {
+      AppNavHost(appState)
+   }
 }

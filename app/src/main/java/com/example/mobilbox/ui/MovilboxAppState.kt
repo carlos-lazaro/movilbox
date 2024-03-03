@@ -10,22 +10,22 @@ import kotlinx.coroutines.CoroutineScope
 
 @Stable
 class MovilboxAppState(
-        val navController : NavHostController,
-        val coroutineScope : CoroutineScope,
+   val navController: NavHostController,
+   val coroutineScope: CoroutineScope,
 )
 
 @Composable
 fun rememberMovilboxAppState(
-        coroutineScope : CoroutineScope = rememberCoroutineScope(),
-        navController : NavHostController = rememberNavController(),
-) : MovilboxAppState {
-    return remember(
-        navController,
-        coroutineScope,
-    ) {
-        MovilboxAppState(
-            navController,
-            coroutineScope,
-        )
-    }
+   coroutineScope: CoroutineScope = rememberCoroutineScope(),
+   navController: NavHostController = rememberNavController(),
+): MovilboxAppState {
+   return remember(
+      navController,
+      coroutineScope,
+   ) {
+      MovilboxAppState(
+         navController,
+         coroutineScope,
+      )
+   }
 }

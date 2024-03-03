@@ -34,108 +34,100 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeRoute(
-        appState : MovilboxAppState,
-        modifier : Modifier = Modifier,
-        homeViewModel : HomeViewModel = hiltViewModel(),
+   appState: MovilboxAppState,
+   modifier: Modifier = Modifier,
+   homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+   val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeScreen(appState, modifier, homeViewModel.uiEvent, uiState) { event ->
-        homeViewModel.onEvent(event)
-    }
+   HomeScreen(appState, modifier, homeViewModel.uiEvent, uiState) { event ->
+      homeViewModel.onEvent(event)
+   }
 }
 
 @Composable
 fun HomeScreen(
-        appState : MovilboxAppState,
-        modifier : Modifier = Modifier,
-        uiEvent : Flow<HomeUiEvent>,
-        uiState : HomeState,
-        onEvent : (HomeEvent) -> Unit,
+   appState: MovilboxAppState,
+   modifier: Modifier = Modifier,
+   uiEvent: Flow<HomeUiEvent>,
+   uiState: HomeState,
+   onEvent: (HomeEvent) -> Unit,
 ) {
-    val coroutineScope = appState.coroutineScope
-    val lazyGridState = rememberLazyGridState()
-    var shouldResetScroll by remember {
-        mutableStateOf(false)
-    }
-    val showButton by remember {
-        derivedStateOf {
-            lazyGridState.firstVisibleItemIndex > 0
-        }
-    }
+   val coroutineScope = appState.coroutineScope
+   val lazyGridState = rememberLazyGridState()
+   var shouldResetScroll by remember {
+      mutableStateOf(false)
+   }
+   val showButton by remember {
+      derivedStateOf {
+         lazyGridState.firstVisibleItemIndex > 0
+      }
+   }
 
-    suspend fun resetScroll() {
-        lazyGridState.animateScrollToItem(0)
-    }
+   suspend fun resetScroll() {
+      lazyGridState.animateScrollToItem(0)
+   }
 
-    LaunchedEffect(Unit) {
-        uiEvent.collect { event ->
-            when (event) {
-                HomeUiEvent.ResetScroll -> {
-                    shouldResetScroll = true
-                }
+   LaunchedEffect(Unit) {
+      uiEvent.collect { event ->
+         when (event) {
+            HomeUiEvent.ResetScroll -> {
+               shouldResetScroll = true
             }
-        }
-    }
+         }
+      }
+   }
 
-    LaunchedEffect(uiState.products, shouldResetScroll) {
-        if (shouldResetScroll) {
-            resetScroll()
-            shouldResetScroll = false
-        }
-    }
+   LaunchedEffect(uiState.products, shouldResetScroll) {
+      if (shouldResetScroll) {
+         resetScroll()
+         shouldResetScroll = false
+      }
+   }
 
-    Scaffold(
-        floatingActionButton = {
-            if (showButton) {
-                FloatingActionButton(onClick = {
-                    coroutineScope.launch {
-                        resetScroll()
-                    }
-                }) {
-                    Icon(
-                        Icons.Filled.KeyboardArrowUp,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
+   Scaffold(floatingActionButton = {
+      if (showButton) {
+         FloatingActionButton(onClick = {
+            coroutineScope.launch {
+               resetScroll()
             }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier
-                .padding(paddingValues)
-        ) {
-            SearchBarProducts() { query ->
-                onEvent(HomeEvent.OnChangeFilter(ProductFilter.ByTitle(query)))
-            }
-            RowFilters(
-                selectedFilter = uiState.productFilter,
-                onChangeSortType = {
-                    onEvent(HomeEvent.OnChangeSortType(it))
-                },
-                categories = uiState.categories.map { it.name },
-                brands = uiState.brands,
-            ) {
-                onEvent(HomeEvent.OnChangeFilter(it))
-            }
-            ResourceProgressIndicator(uiState.stateSync) {
-                onEvent(HomeEvent.OnResetSync)
-            }
-            LazyVerticalGrid(
-                state = lazyGridState,
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                items(uiState.products,
-                      key = { it.id },
-                      itemContent = { item ->
-                          ProductCard(product = item, onClick = { product ->
-                              appState.navController.navigateToProductDetail(product.id)
-                          })
-                      })
-            }
-        }
-    }
+         }) {
+            Icon(
+               Icons.Filled.KeyboardArrowUp,
+               contentDescription = null,
+               tint = MaterialTheme.colorScheme.primary,
+            )
+         }
+      }
+   }) { paddingValues ->
+      Column(
+         modifier.padding(paddingValues)
+      ) {
+         SearchBarProducts() { query ->
+            onEvent(HomeEvent.OnChangeFilter(ProductFilter.ByTitle(query)))
+         }
+         RowFilters(
+            selectedFilter = uiState.productFilter,
+            onChangeSortType = {
+               onEvent(HomeEvent.OnChangeSortType(it))
+            },
+            categories = uiState.categories.map { it.name },
+            brands = uiState.brands,
+         ) {
+            onEvent(HomeEvent.OnChangeFilter(it))
+         }
+         ResourceProgressIndicator(uiState.stateSync) {
+            onEvent(HomeEvent.OnResetSync)
+         }
+         LazyVerticalGrid(
+            state = lazyGridState, columns = GridCells.Fixed(2), modifier = Modifier.weight(1f)
+         ) {
+            items(uiState.products, key = { it.id }, itemContent = { item ->
+               ProductCard(product = item, onClick = { product ->
+                  appState.navController.navigateToProductDetail(product.id)
+               })
+            })
+         }
+      }
+   }
 }

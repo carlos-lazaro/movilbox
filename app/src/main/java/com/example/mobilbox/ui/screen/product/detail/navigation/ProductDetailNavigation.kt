@@ -8,13 +8,13 @@ import com.example.mobilbox.ui.screen.product.detail.ProductDetailRoute
 
 const val PRODUCT_DETAIL_ROUTE = "product_detail_route"
 
-fun NavController.navigateToProductDetail(id : Int) =
-    navigate("${PRODUCT_DETAIL_ROUTE}/$id") { launchSingleTop = true }
+fun NavController.navigateToProductDetail(id: Int) =
+   navigate("${PRODUCT_DETAIL_ROUTE}/$id") { launchSingleTop = true }
 
-fun NavGraphBuilder.productDetailScreen(appState : MovilboxAppState) {
-    composable(route = "$PRODUCT_DETAIL_ROUTE/{id}") { navBackStackEntry ->
-        val id = navBackStackEntry.arguments?.getString("id")
+fun NavGraphBuilder.productDetailScreen(appState: MovilboxAppState) {
+   composable(route = "$PRODUCT_DETAIL_ROUTE/{id}") { navBackStackEntry ->
+      val id = navBackStackEntry.arguments?.getString("id")
 
-        ProductDetailRoute(appState = appState, id = id?.toInt())
-    }
+      ProductDetailRoute(appState = appState, id = id?.toInt())
+   }
 }

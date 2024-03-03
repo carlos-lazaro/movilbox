@@ -25,41 +25,41 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalSelectOneBottomSheet(
-        @StringRes title : Int,
-        elements : List<String>,
-        onItemSelected : (String) -> Unit,
-        onDismiss : () -> Unit,
+   @StringRes title: Int,
+   elements: List<String>,
+   onItemSelected: (String) -> Unit,
+   onDismiss: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
+   val sheetState = rememberModalBottomSheetState()
+   val scope = rememberCoroutineScope()
 
-    ModalBottomSheet(
-        sheetState = sheetState,
-        content = {
-            LazyColumn(
-                state = rememberLazyListState(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_bx4))
-            ) {
-                item {
-                    Text(
-                        text = stringResource(title),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx4)))
-                }
-                items(elements, key = { it }) { item ->
-                    ChipElement(name = item) {
-                        onItemSelected(item)
-                        scope.launch { sheetState.hide() }
-                    }
-                }
+   ModalBottomSheet(
+      sheetState = sheetState,
+      content = {
+         LazyColumn(
+            state = rememberLazyListState(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+               .fillMaxWidth()
+               .padding(dimensionResource(R.dimen.padding_bx4))
+         ) {
+            item {
+               Text(
+                  text = stringResource(title),
+                  style = MaterialTheme.typography.headlineMedium
+               )
+               Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx4)))
             }
-        },
-        onDismissRequest = {
-            onDismiss()
-        }
-    )
+            items(elements, key = { it }) { item ->
+               ChipElement(name = item) {
+                  onItemSelected(item)
+                  scope.launch { sheetState.hide() }
+               }
+            }
+         }
+      },
+      onDismissRequest = {
+         onDismiss()
+      }
+   )
 }

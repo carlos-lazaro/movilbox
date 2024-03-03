@@ -8,19 +8,19 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ChipElement(
-        modifier : Modifier = Modifier,
-        name : String,
-        onClick : () -> Unit = {},
+   modifier: Modifier = Modifier,
+   name: String,
+   onClick: () -> Unit = {},
 ) {
-    AssistChip(
-        modifier = modifier,
-        onClick = { onClick() },
-        label = { Text(text = name) },
-    )
+   AssistChip(
+      modifier = modifier,
+      onClick = { onClick() },
+      label = { Text(text = name) },
+   )
 }
 
 @Preview
 @Composable
 fun ChipElementPreview() {
-    ChipElement(name = "Title") {}
+   ChipElement(name = "Title") {}
 }

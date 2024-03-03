@@ -8,9 +8,9 @@ import com.example.mobilbox.ui.screen.home.navigation.homeScreen
 import com.example.mobilbox.ui.screen.product.detail.navigation.productDetailScreen
 
 @Composable
-fun AppNavHost(appState : MovilboxAppState) {
-    NavHost(navController = appState.navController, startDestination = HOME_ROUTE) {
-        homeScreen(appState)
-        productDetailScreen(appState)
-    }
+fun AppNavHost(appState: MovilboxAppState) {
+   NavHost(navController = appState.navController, startDestination = HOME_ROUTE) {
+      homeScreen(appState)
+      productDetailScreen(appState)
+   }
 }

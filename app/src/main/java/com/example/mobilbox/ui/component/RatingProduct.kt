@@ -18,26 +18,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobilbox.R
 
 @Composable
-fun RatingProduct(rating : String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = rating,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_bx1)))
-        Icon(
-            Icons.Filled.Star,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(AssistChipDefaults.IconSize)
-        )
-    }
+fun RatingProduct(rating: String) {
+   Row(
+      verticalAlignment = Alignment.CenterVertically
+   ) {
+      Text(
+         text = rating,
+         style = MaterialTheme.typography.bodyMedium,
+      )
+      Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_bx1)))
+      Icon(
+         Icons.Filled.Star,
+         contentDescription = null,
+         tint = MaterialTheme.colorScheme.primary,
+         modifier = Modifier.size(AssistChipDefaults.IconSize)
+      )
+   }
 }
 
 @Preview
 @Composable
 fun RatingProductPreview() {
-    RatingProduct(rating = "4.3")
+   RatingProduct(rating = "4.3")
 }

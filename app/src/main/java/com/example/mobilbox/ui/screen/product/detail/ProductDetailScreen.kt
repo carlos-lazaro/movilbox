@@ -60,270 +60,270 @@ import com.example.mobilbox.ui.rememberMovilboxAppState
 
 @Composable
 fun ProductDetailRoute(
-        modifier : Modifier = Modifier,
-        appState : MovilboxAppState,
-        id : Int? = null,
-        productDetailViewModel : ProductDetailViewModel = hiltViewModel(),
+   modifier: Modifier = Modifier,
+   appState: MovilboxAppState,
+   id: Int? = null,
+   productDetailViewModel: ProductDetailViewModel = hiltViewModel(),
 ) {
-    val uiState by productDetailViewModel.uiState.collectAsStateWithLifecycle()
+   val uiState by productDetailViewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(id) {
-        productDetailViewModel.onEvent(ProductDetailEvent.OnSetId(id))
-    }
+   LaunchedEffect(id) {
+      productDetailViewModel.onEvent(ProductDetailEvent.OnSetId(id))
+   }
 
-    ProductDetailScreen(appState, modifier, uiState) { event ->
-        productDetailViewModel.onEvent(event)
-    }
+   ProductDetailScreen(appState, modifier, uiState) { event ->
+      productDetailViewModel.onEvent(event)
+   }
 }
 
 @Composable
 fun ProductDetailScreen(
-        appState : MovilboxAppState,
-        modifier : Modifier = Modifier,
-        uiState : ProductDetailState,
-        onEvent : (ProductDetailEvent) -> Unit,
+   appState: MovilboxAppState,
+   modifier: Modifier = Modifier,
+   uiState: ProductDetailState,
+   onEvent: (ProductDetailEvent) -> Unit,
 ) {
-    val scrollState = rememberScrollState()
+   val scrollState = rememberScrollState()
 
-    uiState.product?.let { product ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .fillMaxSize()
-        ) {
-            Box {
-                AsyncImage(
-                    contentScale = ContentScale.Fit,
-                    model = product.thumbnail,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
-                        .aspectRatio(2f)
-                )
-                IconButtonWithBackground(icon = Icons.Filled.ArrowBack) { appState.navController.navigateUp() }
-                MenuDropdown(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(dimensionResource(R.dimen.padding_bx2))
-                ) {
-                    onEvent(ProductDetailEvent.OnDeleteProduct)
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_bx2))
+   uiState.product?.let { product ->
+      Column(
+         modifier = Modifier
+            .verticalScroll(scrollState)
+            .fillMaxSize()
+      ) {
+         Box {
+            AsyncImage(
+               contentScale = ContentScale.Fit,
+               model = product.thumbnail,
+               contentDescription = null,
+               modifier = Modifier
+                  .background(MaterialTheme.colorScheme.background)
+                  .aspectRatio(2f)
+            )
+            IconButtonWithBackground(icon = Icons.Filled.ArrowBack) { appState.navController.navigateUp() }
+            MenuDropdown(
+               modifier = Modifier
+                  .align(Alignment.TopEnd)
+                  .padding(dimensionResource(R.dimen.padding_bx2))
             ) {
-                Text(
-                    text = product.title.replaceFirstChar { it.uppercase() },
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = product.description,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimensionResource(R.dimen.padding_bx2))
-                ) {
-                    RatingProduct(rating = product.rating.toString())
-
-                    if (product.stock < 1) {
-                        Text(
-                            text = stringResource(R.string.message_out_of_stock),
-                            color = MaterialTheme.colorScheme.tertiary,
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    } else {
-                        Text(
-                            text = stringResource(R.string.message_available_stock),
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
-
-                Text(
-                    text = product.brand,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
-                )
-
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
-                Text(
-                    text = "${stringResource(R.string.price_prefix)} ${product.price}",
-                    textDecoration = TextDecoration.LineThrough,
-                    modifier = Modifier
-                        .alpha(0.6f)
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "${stringResource(R.string.price_prefix)} ${product.getPriceWithDiscount()}",
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_bx2)))
-                    Text(
-                        text = "${product.discountPercentage}% ${stringResource(R.string.discount_suffix)}",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
-                ResourceProgressIndicator(uiState.stateDelete) { appState.navController.navigateUp() }
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
-
-                ChipElement(name = product.category)
-
-                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
-                ImageCarousel(images = product.images)
+               onEvent(ProductDetailEvent.OnDeleteProduct)
             }
-        }
-    }
+         }
+         Column(
+            modifier = Modifier
+               .padding(dimensionResource(R.dimen.padding_bx2))
+         ) {
+            Text(
+               text = product.title.replaceFirstChar { it.uppercase() },
+               fontWeight = FontWeight.Medium,
+               style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+               text = product.description,
+               style = MaterialTheme.typography.bodyMedium
+            )
+
+            Row(
+               verticalAlignment = Alignment.CenterVertically,
+               horizontalArrangement = Arrangement.SpaceBetween,
+               modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(vertical = dimensionResource(R.dimen.padding_bx2))
+            ) {
+               RatingProduct(rating = product.rating.toString())
+
+               if (product.stock < 1) {
+                  Text(
+                     text = stringResource(R.string.message_out_of_stock),
+                     color = MaterialTheme.colorScheme.tertiary,
+                     style = MaterialTheme.typography.headlineSmall,
+                     fontWeight = FontWeight.Medium,
+                  )
+               } else {
+                  Text(
+                     text = stringResource(R.string.message_available_stock),
+                     style = MaterialTheme.typography.headlineSmall,
+                     fontWeight = FontWeight.Medium,
+                  )
+               }
+            }
+
+            Text(
+               text = product.brand,
+               style = MaterialTheme.typography.bodyLarge,
+               fontWeight = FontWeight.Medium,
+            )
+
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+            Text(
+               text = "${stringResource(R.string.price_prefix)} ${product.price}",
+               textDecoration = TextDecoration.LineThrough,
+               modifier = Modifier
+                  .alpha(0.6f)
+            )
+            Row(
+               verticalAlignment = Alignment.CenterVertically
+            ) {
+               Text(
+                  text = "${stringResource(R.string.price_prefix)} ${product.getPriceWithDiscount()}",
+                  style = MaterialTheme.typography.headlineMedium
+               )
+               Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_bx2)))
+               Text(
+                  text = "${product.discountPercentage}% ${stringResource(R.string.discount_suffix)}",
+                  color = MaterialTheme.colorScheme.primary
+               )
+            }
+
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+            ResourceProgressIndicator(uiState.stateDelete) { appState.navController.navigateUp() }
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+
+            ChipElement(name = product.category)
+
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+            ImageCarousel(images = product.images)
+         }
+      }
+   }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ImageCarousel(images : List<String>, modifier : Modifier = Modifier) {
-    val pagerState = rememberPagerState {
-        images.size
-    }
-    HorizontalPager(
-        state = pagerState,
-        key = { it },
-        pageSize = PageSize.Fixed(300.dp)
-    ) {
-        AsyncImage(
-            contentScale = ContentScale.Fit,
-            model = images[it],
-            contentDescription = null,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .aspectRatio(1f)
-        )
-    }
+fun ImageCarousel(images: List<String>, modifier: Modifier = Modifier) {
+   val pagerState = rememberPagerState {
+      images.size
+   }
+   HorizontalPager(
+      state = pagerState,
+      key = { it },
+      pageSize = PageSize.Fixed(300.dp)
+   ) {
+      AsyncImage(
+         contentScale = ContentScale.Fit,
+         model = images[it],
+         contentDescription = null,
+         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .aspectRatio(1f)
+      )
+   }
 }
 
 @Composable
 fun MenuDropdown(
-        modifier : Modifier = Modifier,
-        onDelete : () -> Unit,
+   modifier: Modifier = Modifier,
+   onDelete: () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+   var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = modifier
-    ) {
-        IconButtonWithBackground(
-            icon = Icons.Filled.MoreVert,
-        ) { expanded = true }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Delete") },
-                onClick = {
-                    expanded = false
-                    onDelete()
-                },
-                leadingIcon = {
-                    Icon(
-                        Icons.Outlined.Delete,
-                        contentDescription = null
-                    )
-                })
-        }
-    }
+   Box(
+      modifier = modifier
+   ) {
+      IconButtonWithBackground(
+         icon = Icons.Filled.MoreVert,
+      ) { expanded = true }
+      DropdownMenu(
+         expanded = expanded,
+         onDismissRequest = { expanded = false }
+      ) {
+         DropdownMenuItem(
+            text = { Text("Delete") },
+            onClick = {
+               expanded = false
+               onDelete()
+            },
+            leadingIcon = {
+               Icon(
+                  Icons.Outlined.Delete,
+                  contentDescription = null
+               )
+            })
+      }
+   }
 }
 
 @Composable
 fun IconButtonWithBackground(
-        modifier : Modifier = Modifier,
-        icon : ImageVector,
-        onClick : () -> Unit,
+   modifier: Modifier = Modifier,
+   icon: ImageVector,
+   onClick: () -> Unit,
 ) {
-    IconButton(
-        onClick = { onClick() },
-        modifier = modifier
-            .padding(dimensionResource(R.dimen.padding_bx2))
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                shape = CircleShape,
-            )
-    ) {
-        Icon(
-            icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-        )
-    }
+   IconButton(
+      onClick = { onClick() },
+      modifier = modifier
+         .padding(dimensionResource(R.dimen.padding_bx2))
+         .background(
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+            shape = CircleShape,
+         )
+   ) {
+      Icon(
+         icon,
+         contentDescription = null,
+         tint = MaterialTheme.colorScheme.primary,
+      )
+   }
 }
 
 @Composable
 fun ResourceProgressIndicator(
-        state : ProductDetailViewModel.ResourceState? = null,
-        onSuccess : () -> Unit,
+   state: ProductDetailViewModel.ResourceState? = null,
+   onSuccess: () -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_bx2))
-    ) {
-        when (state) {
-            ProductDetailViewModel.ResourceState.Error -> {
-                Text(
-                    text = stringResource(R.string.product_error_message_deleting),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontStyle = FontStyle.Italic,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    ),
-                    modifier = Modifier.alpha(0.8f)
-                )
-            }
+   Row(
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier
+         .fillMaxWidth()
+         .padding(dimensionResource(R.dimen.padding_bx2))
+   ) {
+      when (state) {
+         ProductDetailViewModel.ResourceState.Error -> {
+            Text(
+               text = stringResource(R.string.product_error_message_deleting),
+               style = MaterialTheme.typography.bodyMedium.copy(
+                  fontStyle = FontStyle.Italic,
+                  color = MaterialTheme.colorScheme.tertiary,
+               ),
+               modifier = Modifier.alpha(0.8f)
+            )
+         }
 
-            ProductDetailViewModel.ResourceState.Loading
-            -> {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
+         ProductDetailViewModel.ResourceState.Loading,
+         -> {
+            LinearProgressIndicator(
+               modifier = Modifier
+                  .fillMaxWidth()
+            )
+         }
 
-            ProductDetailViewModel.ResourceState.Success -> {
-                onSuccess()
-            }
+         ProductDetailViewModel.ResourceState.Success -> {
+            onSuccess()
+         }
 
-            else -> {}
-        }
-    }
+         else -> {}
+      }
+   }
 }
 
 @Preview
 @Composable
 fun ProductDetailScreenPreview() {
-    ProductDetailScreen(
-        appState = rememberMovilboxAppState(),
-        uiState = ProductDetailState(
-            product = Product.getFake()
-        ),
-    ) {}
+   ProductDetailScreen(
+      appState = rememberMovilboxAppState(),
+      uiState = ProductDetailState(
+         product = Product.getFake()
+      ),
+   ) {}
 }
 
 @Preview
 @Composable
 fun ProductDetailScreenPreview2() {
-    ProductDetailScreen(
-        appState = rememberMovilboxAppState(),
-        uiState = ProductDetailState(
-            product = Product.getFake().copy(stock = 0)
-        ),
-    ) {}
+   ProductDetailScreen(
+      appState = rememberMovilboxAppState(),
+      uiState = ProductDetailState(
+         product = Product.getFake().copy(stock = 0)
+      ),
+   ) {}
 }

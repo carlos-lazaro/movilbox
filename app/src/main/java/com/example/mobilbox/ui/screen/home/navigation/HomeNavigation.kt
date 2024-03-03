@@ -10,8 +10,8 @@ const val HOME_ROUTE = "home_route"
 
 fun NavController.navigateToHome() = navigate(HOME_ROUTE)
 
-fun NavGraphBuilder.homeScreen(appState : MovilboxAppState) {
-    composable(route = HOME_ROUTE) {
-        HomeRoute(appState)
-    }
+fun NavGraphBuilder.homeScreen(appState: MovilboxAppState) {
+   composable(route = HOME_ROUTE) {
+      HomeRoute(appState)
+   }
 }

@@ -6,12 +6,12 @@ import com.example.mobilbox.domain.model.Category
 
 @Entity(tableName = "categories")
 data class CategoryEntity(
-        @PrimaryKey
-        val id : Int,
-        val name : String,
+   @PrimaryKey
+   val id: Int,
+   val name: String,
 )
 
 fun CategoryEntity.toCategory() = Category(
-    id = id,
-    name = name,
+   id = id,
+   name = name,
 )

@@ -12,9 +12,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
-    @Provides
-    @Singleton
-    fun productRepository(productRepository : ProductEntityRepository) : ProductRepository {
-        return productRepository
-    }
+   @Provides
+   @Singleton
+   fun productRepository(productRepository: ProductEntityRepository): ProductRepository {
+      return productRepository
+   }
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Define base unit -->
-    <dimen name="base_unit">4dp</dimen>
+   <!-- Define base unit -->
+   <dimen name="base_unit">4dp</dimen>
 
-    <dimen name="elevation_4x1">4dp</dimen>
-    <dimen name="elevation_4x2">8dp</dimen>
+   <dimen name="elevation_4x1">4dp</dimen>
+   <dimen name="elevation_4x2">8dp</dimen>
 
-    <dimen name="padding_bx1">4dp</dimen>
-    <dimen name="padding_bx2">8dp</dimen>
-    <dimen name="padding_bx3">12dp</dimen>
-    <dimen name="padding_bx4">16dp</dimen>
+   <dimen name="padding_bx1">4dp</dimen>
+   <dimen name="padding_bx2">8dp</dimen>
+   <dimen name="padding_bx3">12dp</dimen>
+   <dimen name="padding_bx4">16dp</dimen>
 </resources>

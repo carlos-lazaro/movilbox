@@ -8,12 +8,12 @@ import retrofit2.http.Path
 
 interface ProductService {
 
-    @GET("products?limit=100")
-    suspend fun getProductResources() : GetProductResourcesDto
+   @GET("products?limit=100")
+   suspend fun getProductResources(): GetProductResourcesDto
 
-    @GET("products/categories")
-    suspend fun getProductResourceCategories() : List<String>
+   @GET("products/categories")
+   suspend fun getProductResourceCategories(): List<String>
 
-    @DELETE("products/{id}")
-    suspend fun deleteProductById(@Path("id") id : Int) : DeleteProductByIdDto?
+   @DELETE("products/{id}")
+   suspend fun deleteProductById(@Path("id") id: Int): DeleteProductByIdDto?
 }
