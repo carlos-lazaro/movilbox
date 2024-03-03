@@ -42,7 +42,6 @@ sealed class ProductFilter(
         ProductFilter(sortType, R.string.filter_name_brand, 6)
 
     @Parcelize
-
     data class ByTitle(
             var title : String,
             override var sortType : SortType = SortType.DESC,

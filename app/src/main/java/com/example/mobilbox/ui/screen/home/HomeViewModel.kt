@@ -25,18 +25,6 @@ class HomeViewModel @Inject constructor(
         private val productUseCases : ProductUseCases
 ) : ViewModel() {
 
-    private fun syncStateDatabase() {
-        viewModelScope.launch {
-            stateSync.value = ResourceState.Loading
-            val isSuccess = productUseCases.syncDatabaseUseCase()
-            if (isSuccess) {
-                stateSync.value = ResourceState.Success(System.currentTimeMillis())
-            } else {
-                stateSync.value = ResourceState.Error
-            }
-        }
-    }
-
     private val _uiEvent = Channel<HomeUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
@@ -57,7 +45,8 @@ class HomeViewModel @Inject constructor(
     ) { categories, brands, filter, stateSync ->
         HomeStateData(categories, brands, filter, stateSync)
     }.flatMapLatest { (categories, brands, filter, stateSync) ->
-        productUseCases.getProductsUseCase(filter)
+        productUseCases
+            .getProductsUseCase(filter)
             .map { products ->
                 HomeState(
                     products = products,
@@ -130,6 +119,18 @@ class HomeViewModel @Inject constructor(
     private fun sendUiEvent(event : HomeUiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
+        }
+    }
+
+    private fun syncStateDatabase() {
+        viewModelScope.launch {
+            stateSync.value = ResourceState.Loading
+            val isSuccess = productUseCases.syncDatabaseUseCase()
+            if (isSuccess) {
+                stateSync.value = ResourceState.Success(System.currentTimeMillis())
+            } else {
+                stateSync.value = ResourceState.Error
+            }
         }
     }
 

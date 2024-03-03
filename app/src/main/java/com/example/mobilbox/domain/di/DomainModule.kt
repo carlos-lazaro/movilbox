@@ -1,12 +1,12 @@
 package com.example.mobilbox.domain.di
 
 import com.example.mobilbox.domain.repository.ProductRepository
+import com.example.mobilbox.domain.usecase.ProductUseCases
 import com.example.mobilbox.domain.usecase.product.DeleteProductByIdUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductBrandsUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductByIdUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductCategoriesUseCase
 import com.example.mobilbox.domain.usecase.product.GetProductsUseCase
-import com.example.mobilbox.domain.usecase.ProductUseCases
 import com.example.mobilbox.domain.usecase.product.SyncDatabaseUseCase
 import dagger.Module
 import dagger.Provides
