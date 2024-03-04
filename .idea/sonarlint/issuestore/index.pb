@@ -49,3 +49,11 @@ Bapp/src/main/java/com/example/mobilbox/ui/component/ProductCard.kt,5/5/5516abd
 build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
 I
 gradle/libs.versions.toml,d/7/d7595319a0658be6f1ed500ad590d42e4b28bc4f
+|
+Lapp/src/main/java/com/example/mobilbox/data/remote/service/ProductService.kt,e/8/e876ad411b74845abd9ad23da5bc6a5b98faa42a
+u
+Eapp/src/main/java/com/example/mobilbox/data/remote/di/RemoteModule.kt,1/f/1f2d7bbde73139750c71571ac6e59159cd775ee5
+Ç
+Rapp/src/main/java/com/example/mobilbox/data/local/database/model/CategoryEntity.kt,2/1/219dcc3db54f997e280b113bae3dbed1a1e7bc41
+Å
+Qapp/src/main/java/com/example/mobilbox/data/local/database/model/ProductEntity.kt,0/4/04d416d4130256bef041d3f02a330499a8c7c893

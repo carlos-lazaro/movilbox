@@ -1,5 +1,6 @@
 package com.example.mobilbox.data.remote.di
 
+import com.example.mobilbox.BuildConfig
 import com.example.mobilbox.data.remote.service.ProductService
 import dagger.Module
 import dagger.Provides
@@ -29,7 +30,7 @@ class RemoteModule {
    @Provides
    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
       return Retrofit.Builder()
-         .baseUrl("https://dummyjson.com/")
+         .baseUrl(BuildConfig.BASE_URL)
          .client(okHttpClient)
          .addConverterFactory(MoshiConverterFactory.create())
          .build()

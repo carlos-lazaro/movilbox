@@ -32,7 +32,12 @@ android {
    }
 
    buildTypes {
+      debug {
+         buildConfigField("String", "BASE_URL", "\"https://dummyjson.com/\"")
+      }
       release {
+         buildConfigField("String", "BASE_URL", "\"https://dummyjson.com/\"")
+
          isMinifyEnabled = false
          proguardFiles(
             getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -49,6 +54,7 @@ android {
    }
    buildFeatures {
       compose = true
+      buildConfig = true
    }
    composeOptions {
       kotlinCompilerExtensionVersion = "1.5.1"
