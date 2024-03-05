@@ -1,6 +1,5 @@
 package com.example.mobilbox.ui.screen.product.detail
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,50 +12,37 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.mobilbox.R
 import com.example.mobilbox.domain.model.Product
 import com.example.mobilbox.ui.MovilboxAppState
-import com.example.mobilbox.ui.component.ChipElement
-import com.example.mobilbox.ui.component.RatingProduct
 import com.example.mobilbox.ui.rememberMovilboxAppState
+import com.example.mobilbox.ui.screen.product.component.ChipElement
+import com.example.mobilbox.ui.screen.product.component.RatingProduct
+import com.example.mobilbox.ui.screen.product.detail.component.DeleteProductStateIndicator
+import com.example.mobilbox.ui.screen.product.detail.component.IconActionButton
+import com.example.mobilbox.ui.screen.product.detail.component.ImageCarousel
+import com.example.mobilbox.ui.screen.product.detail.component.ProductActionsDropdown
 
 @Composable
 fun ProductDetailRoute(
@@ -87,7 +73,7 @@ fun ProductDetailScreen(
 
    uiState.product?.let { product ->
       Column(
-         modifier = Modifier
+         modifier = modifier
             .verticalScroll(scrollState)
             .fillMaxSize()
       ) {
@@ -100,8 +86,10 @@ fun ProductDetailScreen(
                   .background(MaterialTheme.colorScheme.background)
                   .aspectRatio(2f)
             )
-            IconButtonWithBackground(icon = Icons.Filled.ArrowBack) { appState.navController.navigateUp() }
-            MenuDropdown(
+            IconActionButton(icon = Icons.AutoMirrored.Filled.ArrowBack) {
+               appState.navController.navigateUp()
+            }
+            ProductActionsDropdown(
                modifier = Modifier
                   .align(Alignment.TopEnd)
                   .padding(dimensionResource(R.dimen.padding_bx2))
@@ -110,8 +98,7 @@ fun ProductDetailScreen(
             }
          }
          Column(
-            modifier = Modifier
-               .padding(dimensionResource(R.dimen.padding_bx2))
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_bx2))
          ) {
             Text(
                text = product.title.replaceFirstChar { it.uppercase() },
@@ -119,8 +106,7 @@ fun ProductDetailScreen(
                style = MaterialTheme.typography.titleLarge
             )
             Text(
-               text = product.description,
-               style = MaterialTheme.typography.bodyMedium
+               text = product.description, style = MaterialTheme.typography.bodyMedium
             )
 
             Row(
@@ -155,11 +141,11 @@ fun ProductDetailScreen(
             )
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+
             Text(
                text = "${stringResource(R.string.price_prefix)} ${product.price}",
                textDecoration = TextDecoration.LineThrough,
-               modifier = Modifier
-                  .alpha(0.6f)
+               modifier = Modifier.alpha(0.6f)
             )
             Row(
                verticalAlignment = Alignment.CenterVertically
@@ -176,132 +162,17 @@ fun ProductDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
-            ResourceProgressIndicator(uiState.stateDelete) { appState.navController.navigateUp() }
+
+            DeleteProductStateIndicator(uiState.stateDelete) { appState.navController.navigateUp() }
+
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
 
             ChipElement(name = product.category)
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_bx2)))
+
             ImageCarousel(images = product.images)
          }
-      }
-   }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ImageCarousel(images: List<String>, modifier: Modifier = Modifier) {
-   val pagerState = rememberPagerState {
-      images.size
-   }
-   HorizontalPager(
-      state = pagerState,
-      key = { it },
-      pageSize = PageSize.Fixed(300.dp)
-   ) {
-      AsyncImage(
-         contentScale = ContentScale.Fit,
-         model = images[it],
-         contentDescription = null,
-         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .aspectRatio(1f)
-      )
-   }
-}
-
-@Composable
-fun MenuDropdown(
-   modifier: Modifier = Modifier,
-   onDelete: () -> Unit,
-) {
-   var expanded by remember { mutableStateOf(false) }
-
-   Box(
-      modifier = modifier
-   ) {
-      IconButtonWithBackground(
-         icon = Icons.Filled.MoreVert,
-      ) { expanded = true }
-      DropdownMenu(
-         expanded = expanded,
-         onDismissRequest = { expanded = false }
-      ) {
-         DropdownMenuItem(
-            text = { Text("Delete") },
-            onClick = {
-               expanded = false
-               onDelete()
-            },
-            leadingIcon = {
-               Icon(
-                  Icons.Outlined.Delete,
-                  contentDescription = null
-               )
-            })
-      }
-   }
-}
-
-@Composable
-fun IconButtonWithBackground(
-   modifier: Modifier = Modifier,
-   icon: ImageVector,
-   onClick: () -> Unit,
-) {
-   IconButton(
-      onClick = { onClick() },
-      modifier = modifier
-         .padding(dimensionResource(R.dimen.padding_bx2))
-         .background(
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-            shape = CircleShape,
-         )
-   ) {
-      Icon(
-         icon,
-         contentDescription = null,
-         tint = MaterialTheme.colorScheme.primary,
-      )
-   }
-}
-
-@Composable
-fun ResourceProgressIndicator(
-   state: ProductDetailViewModel.ResourceState? = null,
-   onSuccess: () -> Unit,
-) {
-   Row(
-      verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier
-         .fillMaxWidth()
-         .padding(dimensionResource(R.dimen.padding_bx2))
-   ) {
-      when (state) {
-         ProductDetailViewModel.ResourceState.Error -> {
-            Text(
-               text = stringResource(R.string.product_error_message_deleting),
-               style = MaterialTheme.typography.bodyMedium.copy(
-                  fontStyle = FontStyle.Italic,
-                  color = MaterialTheme.colorScheme.tertiary,
-               ),
-               modifier = Modifier.alpha(0.8f)
-            )
-         }
-
-         ProductDetailViewModel.ResourceState.Loading,
-         -> {
-            LinearProgressIndicator(
-               modifier = Modifier
-                  .fillMaxWidth()
-            )
-         }
-
-         ProductDetailViewModel.ResourceState.Success -> {
-            onSuccess()
-         }
-
-         else -> {}
       }
    }
 }
